@@ -18,6 +18,14 @@ namespace NourishMeant
         int mFadeIncrement = 3;
         double mFadeDelay = .035;
 
+        int counter = 0;
+
+        /*Game states for managing game behavior */
+        enum GameStates { Menu, 
+            Playing, 
+            Pause, 
+            Intro } 
+
         public Game1()
         {
 
@@ -54,6 +62,7 @@ namespace NourishMeant
             mySprite = Content.Load<Texture2D>("CharactersBright_Line1");
             background = Content.Load<Texture2D>("drawable-port-xxhdpi-screen");
             //font = Content.Load<SpriteFont>("Font");
+            GameStateManager.Instance.SetContent(Content);// set the GameState for the gamestatemanager
         }
 
         protected override void Update(GameTime gameTime)
@@ -64,15 +73,46 @@ namespace NourishMeant
             // TODO: Add your update logic here
 
 
-            mFadeDelay -= gameTime.ElapsedGameTime.TotalSeconds;
+            mFadeDelay -= gameTime.ElapsedGameTime.TotalSeconds - 2;
 
             mAlphaValue += mFadeIncrement;
 
-            if (mAlphaValue >= 255 || mAlphaValue <= 0)
+            if (mFadeDelay <= 0)
             {
-                mFadeIncrement *= -1;
-            }
+                counter += 1;
+                mFadeDelay = .035;
+                mAlphaValue += mFadeIncrement;
+                
+                if (mAlphaValue >= 255 || mAlphaValue <= 0)
+                {
+                    mFadeIncrement *= -1;
+                    counter += 1;
+                    
+                }
+                //mFadeDelay -= gameTime.ElapsedGameTime.TotalSeconds - 15;
+                //Reverse Fade 
+                /*if (counter == 2)
+                {
+                    mFadeDelay = .035;
+                    mAlphaValue -= mFadeIncrement;
 
+                    if (mAlphaValue <= 255 || mAlphaValue >= 0)
+                    {
+                        mFadeIncrement *= +1;
+                        
+
+                    }
+                    mFadeDelay -= gameTime.ElapsedGameTime.TotalSeconds - 2;
+
+                }*/
+
+
+
+
+
+
+            }
+  
             base.Update(gameTime);
         }
 
@@ -92,6 +132,11 @@ namespace NourishMeant
             _spriteBatch.End();
 
             base.Draw(gameTime);
+        }
+
+        protected override void UnloadContent ()
+        {
+            GameStateManager.Instance.UnloadContent();
         }
     }
 }
