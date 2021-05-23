@@ -25,6 +25,8 @@ namespace NourishMeant
 		
 		public static void UpdateIdValues()
 		{
+			global::SQLiteConnectionBuddy.Android.Resource.String.ApplicationName = global::NourishMeant.Resource.String.ApplicationName;
+			global::SQLiteConnectionBuddy.Android.Resource.String.Hello = global::NourishMeant.Resource.String.Hello;
 		}
 		
 		public partial class Attribute
@@ -60,7 +62,13 @@ namespace NourishMeant
 		{
 			
 			// aapt resource value: 0x7F020000
-			public const int app_name = 2130837504;
+			public const int ApplicationName = 2130837504;
+			
+			// aapt resource value: 0x7F020002
+			public const int app_name = 2130837506;
+			
+			// aapt resource value: 0x7F020001
+			public const int Hello = 2130837505;
 			
 			static String()
 			{

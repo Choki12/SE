@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Input.Touch;
 
 namespace NourishMeant
 {
@@ -8,14 +9,18 @@ namespace NourishMeant
     {
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
+        private SpriteBatch _spriteBatch2;
 
         Texture2D mySprite; //will figure out what to use this for
         Texture2D background;
+        //Texture2D background2;
         SpriteFont font;
+        bool ChangeScreen = false;
 
         //fading out logo screen
         int mAlphaValue = 1;
         int mFadeIncrement = 3;
+        double ScreenDelay = 20;
         double mFadeDelay = .035;
 
         int counter = 0;
@@ -29,8 +34,8 @@ namespace NourishMeant
         public Game1()
         {
 
-            /*https://www.youtube.com/watch?v=-XEmsZNKonM
-            * The Xamarin Show - Write Once play everywhere with Dean Ellis*/
+            /*Obtained from https://www.youtube.com/watch?v=-XEmsZNKonM
+              The Xamarin Show - Write Once play everywhere with Dean Ellis*/
 
             _graphics = new GraphicsDeviceManager(this);
             /*{
@@ -40,7 +45,8 @@ namespace NourishMeant
             };*/
 
             _graphics.SupportedOrientations = DisplayOrientation.LandscapeLeft | DisplayOrientation.LandscapeRight;
-            
+            TouchPanel.EnabledGestures = GestureType.None;
+
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
@@ -61,8 +67,11 @@ namespace NourishMeant
             //Load content from the content pipeline
             mySprite = Content.Load<Texture2D>("CharactersBright_Line1");
             background = Content.Load<Texture2D>("drawable-port-xxhdpi-screen");
-            //font = Content.Load<SpriteFont>("Font");
-            GameStateManager.Instance.SetContent(Content);// set the GameState for the gamestatemanager
+            font = Content.Load<SpriteFont>("Font");
+
+            GameStateManager.Instance.SetContent(Content);
+            GameStateManager.Instance.AddNewScreen(new Play(GraphicsDevice));
+            
         }
 
         protected override void Update(GameTime gameTime)
@@ -89,30 +98,9 @@ namespace NourishMeant
                     counter += 1;
                     
                 }
-                //mFadeDelay -= gameTime.ElapsedGameTime.TotalSeconds - 15;
-                //Reverse Fade 
-                /*if (counter == 2)
-                {
-                    mFadeDelay = .035;
-                    mAlphaValue -= mFadeIncrement;
-
-                    if (mAlphaValue <= 255 || mAlphaValue >= 0)
-                    {
-                        mFadeIncrement *= +1;
-                        
-
-                    }
-                    mFadeDelay -= gameTime.ElapsedGameTime.TotalSeconds - 2;
-
-                }*/
-
-
-
-
-
-
+     
             }
-  
+            GameStateManager.Instance.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -128,15 +116,43 @@ namespace NourishMeant
             //spriteBatch draw
             _spriteBatch.Draw(background, new Vector2(0, 0), new Color (255, 255, 255, MathHelper.Clamp(mAlphaValue, 0, 255)));
             //_spriteBatch.Draw(mySprite, new Vector2(150, 150), Color.White);
-
+            
             _spriteBatch.End();
 
+
+
+            //GameStateManager.Instance.Draw(_spriteBatch);
+            
+            /*Written By Boitshoko Tumane*/
+            ScreenDelay -= gameTime.ElapsedGameTime.TotalSeconds;
+            if(ScreenDelay <= 0)
+            {
+                FadeToBlack(_spriteBatch, background, 1);
+                GameStateManager.Instance.Draw(_spriteBatch);
+            }
+
+
+
+
             base.Draw(gameTime);
+            
         }
 
         protected override void UnloadContent ()
         {
             GameStateManager.Instance.UnloadContent();
+        }
+
+        /*Written by Boitshoko Tumane*/
+        public void FadeToBlack(SpriteBatch spriteBatch, Texture2D texture ,float alpha)
+        {
+            spriteBatch.Begin();
+
+            spriteBatch.Draw(texture,
+                             new Vector2(0, 0),
+                             Color.Black * alpha);
+
+            spriteBatch.End();
         }
     }
 }
