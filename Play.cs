@@ -19,18 +19,19 @@ namespace NourishMeant
     public class Play : GameState
     {
         Texture2D background2;
+        SpriteFont font;
         public Play(GraphicsDevice graphicsDevice) :base(graphicsDevice)
         {
           
         }
         public override void Draw(SpriteBatch spriteBatch)
         {
-            _graphicsDevice.Clear(Color.Black);
+            _graphicsDevice.Clear(Color.White);
             spriteBatch.Begin();
 
             // Draw sprites here
-            spriteBatch.Draw(background2, new Vector2(150, 150), Color.White);
-
+            //spriteBatch.Draw(background2, new Vector2(150, 150), Color.White);
+            spriteBatch.DrawString(font, "Prepare your meal", new Vector2(220, 100), Color.Black,0, new Vector2(0,0), 8.0f, SpriteEffects.None, 0.0f);
             spriteBatch.End();
         }
 
@@ -43,6 +44,7 @@ namespace NourishMeant
         {
             content.RootDirectory = "Content";
             background2 = content.Load<Texture2D>("1f");
+            font = content.Load<SpriteFont>("Font");
         }
 
         public override void UnloadContent()

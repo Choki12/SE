@@ -14,13 +14,12 @@ namespace NourishMeant
         Texture2D mySprite; //will figure out what to use this for
         Texture2D background;
         //Texture2D background2;
-        SpriteFont font;
-        bool ChangeScreen = false;
-
+        
+       
         //fading out logo screen
         int mAlphaValue = 1;
         int mFadeIncrement = 3;
-        double ScreenDelay = 20;
+        double ScreenDelay = 10;
         double mFadeDelay = .035;
 
         int counter = 0;
@@ -67,7 +66,7 @@ namespace NourishMeant
             //Load content from the content pipeline
             mySprite = Content.Load<Texture2D>("CharactersBright_Line1");
             background = Content.Load<Texture2D>("drawable-port-xxhdpi-screen");
-            font = Content.Load<SpriteFont>("Font");
+            
 
             GameStateManager.Instance.SetContent(Content);
             GameStateManager.Instance.AddNewScreen(new Play(GraphicsDevice));
